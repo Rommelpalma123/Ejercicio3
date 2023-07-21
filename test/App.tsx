@@ -8,8 +8,8 @@ function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={Users} />
-        <Drawer.Screen name="About" component={Wifi} />
+        <Drawer.Screen name="Usuarios" component={Users} />
+        <Drawer.Screen name="Wifi" component={Wifi} />
       </Drawer.Navigator>
 
     </NavigationContainer>
