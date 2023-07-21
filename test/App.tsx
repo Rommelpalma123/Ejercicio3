@@ -1,6 +1,6 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import Users from './src/pages/Users';
+import { Users } from './src/pages/Users';
 import Wifi from './src/pages/Wifi';
 const Drawer = createDrawerNavigator();
 

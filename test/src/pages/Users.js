@@ -1,8 +1,21 @@
-import {View, Text, FlatList, StyleSheet, Image} from 'react-native';
 import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {useNavigation} from '@react-navigation/native';
+import UserDetails from '../components/UserDetails'; // Importa el componente UserDetails
 import axios from 'axios';
 
-export default function Users() {
+const Stack = createStackNavigator();
+
+export const Users = () => {
+  const navigation = useNavigation();
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -19,24 +32,39 @@ export default function Users() {
   };
 
   const renderItem = ({item}) => (
-    <View style={styles.userContainer}>
-      <Text style={styles.nameText}>Name: {item.first_name}</Text>
-      <Text style={styles.emailText}>Email: {item.email}</Text>
-      <Text style={styles.nameText}>LastName: {item.last_name}</Text>
-      <Image style={styles.avatar} source={{uri: item.avatar}} />
-    </View>
+    <TouchableOpacity
+      onPress={() => navigation.navigate('UserDetails', {user: item})}>
+      <View style={styles.userContainer}>
+        <Text style={styles.nameText}>Name: {item.first_name}</Text>
+        <Text style={styles.emailText}>Email: {item.email}</Text>
+        <Text style={styles.nameText}>Last Name: {item.last_name}</Text>
+      </View>
+    </TouchableOpacity>
   );
 
   return (
-    <View>
-      <FlatList
-        data={users}
-        keyExtractor={item => item.id.toString()}
-        renderItem={renderItem}
+    <Stack.Navigator>
+      <Stack.Screen name="Usuarios" options={{headerShown: false}}>
+        {() => (
+          <View>
+            <FlatList
+              data={users}
+              keyExtractor={item => item.id.toString()}
+              renderItem={renderItem}
+            />
+          </View>
+        )}
+      </Stack.Screen>
+      <Stack.Screen
+        name="UserDetails"
+        component={UserDetails}
+        options={({route}) => ({title: route.params.user.first_name})}
       />
-    </View>
+    </Stack.Navigator>
   );
-}
+};
+
+export default Users;
 
 const styles = StyleSheet.create({
   userContainer: {
@@ -45,7 +73,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     backgroundColor: '#99d5e7',
     borderRadius: 5,
-    gap: 12
+    gap: 12,
   },
   nameText: {
     color: 'black',
